@@ -52,15 +52,15 @@ const AdminPage = () => {
     setIsAddingTransaction(false);
   };
 
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = (id: string) => {
     setProducts(products.filter(product => product.id !== id));
   };
 
-  const handleDeleteTransaction = (id) => {
+  const handleDeleteTransaction = (id: string) => {
     setTransactions(transactions.filter(transaction => transaction.id !== id));
   };
 
-  const handleEditProduct = (id) => {
+  const handleEditProduct = (id: string) => {
     const product = products.find(p => p.id === id);
     setNewProduct({ name: product.name, price: product.price });
     setIsEditingProductId(id);
@@ -77,7 +77,7 @@ const AdminPage = () => {
     setNewProduct({ name: '', price: '' });
   };
 
-  const handleEditTransaction = (id) => {
+  const handleEditTransaction = (id: string) => {
     const trx = transactions.find(t => t.id === id);
     setNewTransaction({ product: trx.product, buyer: trx.buyer });
     setIsEditingTransactionId(id);
