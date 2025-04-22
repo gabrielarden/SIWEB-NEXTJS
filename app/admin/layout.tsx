@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';  // Pastikan import ini sudah benar
+import { useRouter } from 'next/navigation';
 import {
   HomeIcon,
   ShoppingBagIcon,
@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const AdminPage = () => {
-  const router = useRouter(); // Tambahkan baris ini untuk mendeklarasikan router
+  const router = useRouter();
   const [page, setPage] = useState('dashboard');
   const [products, setProducts] = useState([
     { id: 1, name: 'Mawar Merah', price: 150000 },
@@ -25,8 +25,8 @@ const AdminPage = () => {
   ]);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [isAddingTransaction, setIsAddingTransaction] = useState(false);
-  const [isEditingProductId, setIsEditingProductId] = useState(null);
-  const [isEditingTransactionId, setIsEditingTransactionId] = useState(null);
+  const [isEditingProductId, setIsEditingProductId] = useState<number | null>(null);
+  const [isEditingTransactionId, setIsEditingTransactionId] = useState<number | null>(null);
   const [newProduct, setNewProduct] = useState({ name: '', price: '' });
   const [newTransaction, setNewTransaction] = useState({ product: '', buyer: '' });
 
@@ -52,54 +52,54 @@ const AdminPage = () => {
     setIsAddingTransaction(false);
   };
 
-  const handleDeleteProduct = (id: string) => {
-    setProducts(products.filter(product => product.id !== id));
+  const handleDeleteProduct = (id: number) => {
+    setProducts(products.filter(p => p.id !== id));
   };
 
-  const handleDeleteTransaction = (id: string) => {
-    setTransactions(transactions.filter(transaction => transaction.id !== id));
+  const handleDeleteTransaction = (id: number) => {
+    setTransactions(transactions.filter(t => t.id !== id));
   };
 
-  const handleEditProduct = (id: string) => {
-    const product = products.find(p => p.id === id);
-    setNewProduct({ name: product.name, price: product.price });
+  const handleEditProduct = (id: number) => {
+    const prod = products.find(p => p.id === id);
+    if (!prod) return;
+    setNewProduct({ name: prod.name, price: prod.price.toString() });
     setIsEditingProductId(id);
   };
 
   const handleUpdateProduct = () => {
     if (!newProduct.name || !newProduct.price) return;
-    setProducts(products.map(product =>
-      product.id === isEditingProductId
-        ? { ...product, name: newProduct.name, price: parseInt(newProduct.price) }
-        : product
+    setProducts(products.map(p =>
+      p.id === isEditingProductId
+        ? { ...p, name: newProduct.name, price: parseInt(newProduct.price) }
+        : p
     ));
     setIsEditingProductId(null);
     setNewProduct({ name: '', price: '' });
   };
 
-  const handleEditTransaction = (id: string) => {
+  const handleEditTransaction = (id: number) => {
     const trx = transactions.find(t => t.id === id);
+    if (!trx) return;
     setNewTransaction({ product: trx.product, buyer: trx.buyer });
     setIsEditingTransactionId(id);
   };
 
   const handleUpdateTransaction = () => {
     if (!newTransaction.product || !newTransaction.buyer) return;
-    setTransactions(transactions.map(trx =>
-      trx.id === isEditingTransactionId
-        ? { ...trx, product: newTransaction.product, buyer: newTransaction.buyer }
-        : trx
+    setTransactions(transactions.map(t =>
+      t.id === isEditingTransactionId
+        ? { ...t, product: newTransaction.product, buyer: newTransaction.buyer }
+        : t
     ));
     setIsEditingTransactionId(null);
     setNewTransaction({ product: '', buyer: '' });
   };
 
   const handleLogout = () => {
-    // Kalau kamu punya token session yang perlu dihapus, lakukan di sini
     router.push('/');
   };
 
-  // Render konten sesuai dengan state 'page'
   const renderContent = () => {
     if (page === 'dashboard') {
       return (
@@ -125,33 +125,41 @@ const AdminPage = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Daftar Produk</h2>
             <button
-              onClick={() => setIsAddingProduct(true)}
+              onClick={() => {
+                setIsAddingProduct(true);
+                setIsEditingProductId(null);
+                setNewProduct({ name: '', price: '' });
+              }}
               className="bg-pink-600 text-white px-4 py-2 rounded flex items-center gap-2"
             >
               <PlusIcon className="w-5 h-5" /> Tambah Produk
             </button>
           </div>
-          <ul className="space-y-2">
-            {products.map((product) => (
-              <li
-                key={product.id}
-                className="bg-white p-4 rounded shadow flex justify-between items-center"
-              >
-                <div>
-                  <p className="font-semibold">{product.name}</p>
-                  <p className="text-gray-500">Rp{product.price.toLocaleString()}</p>
-                </div>
-                <div className="flex gap-2">
-                  <button className="text-blue-500" onClick={() => handleEditProduct(product.id)}>
-                    <PencilIcon className="w-5 h-5" />
-                  </button>
-                  <button onClick={() => handleDeleteProduct(product.id)} className="text-red-500">
-                    <TrashIcon className="w-5 h-5" />
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <table className="min-w-full bg-white rounded shadow">
+            <thead>
+              <tr>
+                <th className="text-left px-4 py-2">Nama Produk</th>
+                <th className="text-left px-4 py-2">Harga</th>
+                <th className="text-left px-4 py-2">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((p) => (
+                <tr key={p.id} className="border-t">
+                  <td className="px-4 py-2">{p.name}</td>
+                  <td className="px-4 py-2">Rp{p.price.toLocaleString()}</td>
+                  <td className="px-4 py-2 space-x-2">
+                    <button className="text-blue-500" onClick={() => handleEditProduct(p.id)}>
+                      <PencilIcon className="w-5 h-5 inline" />
+                    </button>
+                    <button onClick={() => handleDeleteProduct(p.id)} className="text-red-500">
+                      <TrashIcon className="w-5 h-5 inline" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           {(isAddingProduct || isEditingProductId !== null) && (
             <div className="mt-6 p-4 bg-gray-100 rounded space-y-2">
               <h3 className="font-bold mb-2">{isEditingProductId ? 'Edit Produk' : 'Form Tambah Produk'}</h3>
@@ -169,12 +177,24 @@ const AdminPage = () => {
                 value={newProduct.price}
                 onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
               />
-              <button
-                onClick={isEditingProductId ? handleUpdateProduct : handleAddProduct}
-                className="bg-green-600 text-white px-4 py-2 rounded"
-              >
-                Simpan
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={isEditingProductId ? handleUpdateProduct : handleAddProduct}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Simpan
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAddingProduct(false);
+                    setIsEditingProductId(null);
+                    setNewProduct({ name: '', price: '' });
+                  }}
+                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                >
+                  Batal
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -187,27 +207,31 @@ const AdminPage = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Daftar Transaksi</h2>
             <button
-              onClick={() => setIsAddingTransaction(true)}
+              onClick={() => {
+                setIsAddingTransaction(true);
+                setIsEditingTransactionId(null);
+                setNewTransaction({ product: '', buyer: '' });
+              }}
               className="bg-pink-600 text-white px-4 py-2 rounded flex items-center gap-2"
             >
               <PlusIcon className="w-5 h-5" /> Tambah Transaksi
             </button>
           </div>
           <ul className="space-y-2">
-            {transactions.map((trx) => (
+            {transactions.map((t) => (
               <li
-                key={trx.id}
+                key={t.id}
                 className="bg-white p-4 rounded shadow flex justify-between items-center"
               >
                 <div>
-                  <p className="font-semibold">{trx.product}</p>
-                  <p className="text-gray-500">Pembeli: {trx.buyer}</p>
+                  <p className="font-semibold">{t.product}</p>
+                  <p className="text-gray-500">Pembeli: {t.buyer}</p>
                 </div>
                 <div className="flex gap-2">
-                  <button className="text-blue-500" onClick={() => handleEditTransaction(trx.id)}>
+                  <button className="text-blue-500" onClick={() => handleEditTransaction(t.id)}>
                     <PencilIcon className="w-5 h-5" />
                   </button>
-                  <button onClick={() => handleDeleteTransaction(trx.id)} className="text-red-500">
+                  <button onClick={() => handleDeleteTransaction(t.id)} className="text-red-500">
                     <TrashIcon className="w-5 h-5" />
                   </button>
                 </div>
@@ -231,12 +255,24 @@ const AdminPage = () => {
                 value={newTransaction.buyer}
                 onChange={(e) => setNewTransaction({ ...newTransaction, buyer: e.target.value })}
               />
-              <button
-                onClick={isEditingTransactionId ? handleUpdateTransaction : handleAddTransaction}
-                className="bg-green-600 text-white px-4 py-2 rounded"
-              >
-                Simpan
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={isEditingTransactionId ? handleUpdateTransaction : handleAddTransaction}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Simpan
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAddingTransaction(false);
+                    setIsEditingTransactionId(null);
+                    setNewTransaction({ product: '', buyer: '' });
+                  }}
+                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                >
+                  Batal
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -246,7 +282,6 @@ const AdminPage = () => {
 
   return (
     <div className="flex">
-      {/* Sidebar */} 
       <div className="w-64 bg-gray-900 text-white h-screen flex flex-col justify-between px-4 py-6">
         <div>
           <h1 className="text-pink-500 text-2xl font-bold mb-10">BOUQUETS HUB</h1>
@@ -268,8 +303,6 @@ const AdminPage = () => {
           <ArrowLeftOnRectangleIcon className="w-5 h-5" /> Logout
         </button>
       </div>
-
-      {/* Main Content */}
       <div className="flex-1 p-6 bg-gray-100 min-h-screen">{renderContent()}</div>
     </div>
   );
