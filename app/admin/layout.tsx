@@ -50,7 +50,7 @@ const AdminPage = () => {
       {
         id: Date.now(),
         name: newProduct.name,
-        price: parseInt(newProduct.price, 10),
+        price: parseInt(newProduct.price, 10), // Ensure price is a number
       },
     ]);
     setNewProduct({ name: '', price: '' });
@@ -326,7 +326,9 @@ const AdminPage = () => {
           <ArrowLeftOnRectangleIcon className="w-5 h-5" /> Logout
         </button>
       </div>
-      <div className="flex-1 p-6 bg-gray-100 min-h-screen">{renderContent()}</div>
+      <div className="flex-1 p-6 bg-gray-100">
+        {renderContent()}
+      </div>
     </div>
   );
 };
