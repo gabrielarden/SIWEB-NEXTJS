@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import AcmeLogo from '@/app/ui/acme-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -15,7 +16,7 @@ export default function Page() {
   const [error, setError] = useState('');
   const router = useRouter();
   
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
     // Simple validation

@@ -12,17 +12,30 @@ import {
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+};
+
+type Transaction = {
+  id: number;
+  product: string;
+  buyer: string;
+};
+
 const AdminPage = () => {
   const router = useRouter();
   const [page, setPage] = useState('dashboard');
-  const [products, setProducts] = useState([
-    { id: 1, name: 'Mawar Merah', price: 150000 },
-    { id: 2, name: 'Lili Putih', price: 120000 },
+  const [products, setProducts] = useState<Product[]>([
+    { id: 1, name: 'Amour Rouge', price: 150000 },
+    { id: 2, name: 'Bluse Of Romance', price: 120000 },
   ]);
-  const [transactions, setTransactions] = useState([
-    { id: 1, product: 'Mawar Merah', buyer: 'Andi' },
-    { id: 2, product: 'Lili Putih', buyer: 'Sita' },
+  const [transactions, setTransactions] = useState<Transaction[]>([
+    { id: 1, product: 'Amour Rouge', buyer: 'Andi' },
+    { id: 2, product: 'Bluse Of Romance', buyer: 'Sita' },
   ]);
+
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [isAddingTransaction, setIsAddingTransaction] = useState(false);
   const [isEditingProductId, setIsEditingProductId] = useState<number | null>(null);
@@ -32,69 +45,80 @@ const AdminPage = () => {
 
   const handleAddProduct = () => {
     if (!newProduct.name || !newProduct.price) return;
-    setProducts([...products, {
-      id: Date.now(),
-      name: newProduct.name,
-      price: parseInt(newProduct.price),
-    }]);
+    setProducts([
+      ...products,
+      {
+        id: Date.now(),
+        name: newProduct.name,
+        price: parseInt(newProduct.price),
+      },
+    ]);
     setNewProduct({ name: '', price: '' });
     setIsAddingProduct(false);
   };
 
   const handleAddTransaction = () => {
     if (!newTransaction.product || !newTransaction.buyer) return;
-    setTransactions([...transactions, {
-      id: Date.now(),
-      product: newTransaction.product,
-      buyer: newTransaction.buyer,
-    }]);
+    setTransactions([
+      ...transactions,
+      {
+        id: Date.now(),
+        product: newTransaction.product,
+        buyer: newTransaction.buyer,
+      },
+    ]);
     setNewTransaction({ product: '', buyer: '' });
     setIsAddingTransaction(false);
   };
 
   const handleDeleteProduct = (id: number) => {
-    setProducts(products.filter(p => p.id !== id));
+    setProducts(products.filter((p: Product) => p.id !== id));
   };
-
+  
   const handleDeleteTransaction = (id: number) => {
-    setTransactions(transactions.filter(t => t.id !== id));
+    setTransactions(transactions.filter((t: Transaction) => t.id !== id));
   };
-
+  
   const handleEditProduct = (id: number) => {
-    const prod = products.find(p => p.id === id);
+    const prod = products.find((p: Product) => p.id === id);
     if (!prod) return;
     setNewProduct({ name: prod.name, price: prod.price.toString() });
     setIsEditingProductId(id);
   };
-
+  
   const handleUpdateProduct = () => {
     if (!newProduct.name || !newProduct.price) return;
-    setProducts(products.map(p =>
-      p.id === isEditingProductId
-        ? { ...p, name: newProduct.name, price: parseInt(newProduct.price) }
-        : p
-    ));
+    setProducts(
+      products.map((p: Product) =>
+        p.id === isEditingProductId
+          ? { ...p, name: newProduct.name, price: parseInt(newProduct.price) }
+          : p
+      )
+    );
     setIsEditingProductId(null);
     setNewProduct({ name: '', price: '' });
   };
-
+  
   const handleEditTransaction = (id: number) => {
-    const trx = transactions.find(t => t.id === id);
+    const trx = transactions.find((t: Transaction) => t.id === id);
     if (!trx) return;
     setNewTransaction({ product: trx.product, buyer: trx.buyer });
     setIsEditingTransactionId(id);
   };
-
+  
   const handleUpdateTransaction = () => {
     if (!newTransaction.product || !newTransaction.buyer) return;
-    setTransactions(transactions.map(t =>
-      t.id === isEditingTransactionId
-        ? { ...t, product: newTransaction.product, buyer: newTransaction.buyer }
-        : t
-    ));
+    setTransactions(
+      transactions.map((t: Transaction) =>
+        t.id === isEditingTransactionId
+          ? { ...t, product: newTransaction.product, buyer: newTransaction.buyer }
+          : t
+      )
+    );
     setIsEditingTransactionId(null);
     setNewTransaction({ product: '', buyer: '' });
   };
+  
 
   const handleLogout = () => {
     router.push('/');
@@ -298,8 +322,8 @@ const AdminPage = () => {
           </nav>
         </div>
         <button 
-        onClick={handleLogout}
-        className="flex items-center gap-3 text-pink-400 hover:text-white hover:bg-pink-600 px-3 py-2 rounded-md transition-all">
+          onClick={handleLogout}
+          className="flex items-center gap-3 text-pink-400 hover:text-white hover:bg-pink-600 px-3 py-2 rounded-md transition-all">
           <ArrowLeftOnRectangleIcon className="w-5 h-5" /> Logout
         </button>
       </div>

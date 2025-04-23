@@ -40,56 +40,48 @@ export default function CustomerHomePage() {
         <h2 className="text-3xl font-bold text-pink-600 mb-2">Products</h2>
         <p className="text-gray-600 mb-8">Order it for you or for your beloved ones</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          {/* Produk 1 - Amour Rouge */}
           <div onClick={openAmourModal} className="cursor-pointer bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/amour-rouge.png" width={1000} height={760} className="hidden md:block mb-2" alt="Amour Rouge" />
             <p className="text-sm text-gray-800">Amour Rouge</p>
             <p className="text-green-600 font-bold text-sm">$9.99</p>
           </div>
 
-          {/* Produk 2 - Blooming Bliss */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/blush-of-romance.png" width={1000} height={760} className="hidden md:block mb-2" alt="Blooming Bliss" />
             <p className="text-sm text-gray-800">Blush of Romance</p>
             <p className="text-green-600 font-bold text-sm">$12.99</p>
           </div>
 
-          {/* Produk 3 - Pink Blossom */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/cutie-pie.png" width={1000} height={760} className="hidden md:block mb-2" alt="Pink Blossom" />
             <p className="text-sm text-gray-800">Cutie Pie</p>
             <p className="text-green-600 font-bold text-sm">$11.99</p>
           </div>
 
-          {/* Produk 4 - Purple Hues */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/golden-grace.png" width={1000} height={760} className="hidden md:block mb-2" alt="Purple Hues" />
             <p className="text-sm text-gray-800">Golden Grace</p>
             <p className="text-green-600 font-bold text-sm">$13.99</p>
           </div>
 
-          {/* Produk 5 - Rose Romance */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/love-in-bloom.png" width={1000} height={760} className="hidden md:block mb-2" alt="Rose Romance" />
             <p className="text-sm text-gray-800">Love in Bloom</p>
             <p className="text-green-600 font-bold text-sm">$10.99</p>
           </div>
 
-          {/* Produk 6 - Summer Sunflower */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/peachy-dream.png" width={1000} height={760} className="hidden md:block mb-2" alt="Summer Sunflower" />
             <p className="text-sm text-gray-800">Peachy Dream</p>
             <p className="text-green-600 font-bold text-sm">$9.49</p>
           </div>
 
-          {/* Produk 7 - Tulip Elegance */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/summer-cherries.png" width={1000} height={760} className="hidden md:block mb-2" alt="Tulip Elegance" />
             <p className="text-sm text-gray-800">Summer Cherries</p>
             <p className="text-green-600 font-bold text-sm">$14.99</p>
           </div>
 
-          {/* Produk 8 - Vintage Lily */}
           <div className="bg-white rounded shadow p-4 hover:shadow-lg transition">
             <Image src="/sweet-strawberry.png" width={1000} height={760} className="hidden md:block mb-2" alt="Vintage Lily" />
             <p className="text-sm text-gray-800">Sweet Child O' Mine</p>
