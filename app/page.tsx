@@ -16,7 +16,7 @@ export default function Page() {
   const [error, setError] = useState('');
   const router = useRouter();
   
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     // Simple validation
