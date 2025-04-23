@@ -50,7 +50,7 @@ const AdminPage = () => {
       {
         id: Date.now(),
         name: newProduct.name,
-        price: parseInt(newProduct.price),
+        price: parseInt(newProduct.price, 10),
       },
     ]);
     setNewProduct({ name: '', price: '' });
@@ -74,38 +74,38 @@ const AdminPage = () => {
   const handleDeleteProduct = (id: number) => {
     setProducts(products.filter((p: Product) => p.id !== id));
   };
-  
+
   const handleDeleteTransaction = (id: number) => {
     setTransactions(transactions.filter((t: Transaction) => t.id !== id));
   };
-  
+
   const handleEditProduct = (id: number) => {
     const prod = products.find((p: Product) => p.id === id);
     if (!prod) return;
     setNewProduct({ name: prod.name, price: prod.price.toString() });
     setIsEditingProductId(id);
   };
-  
+
   const handleUpdateProduct = () => {
     if (!newProduct.name || !newProduct.price) return;
     setProducts(
       products.map((p: Product) =>
         p.id === isEditingProductId
-          ? { ...p, name: newProduct.name, price: parseInt(newProduct.price) }
+          ? { ...p, name: newProduct.name, price: parseInt(newProduct.price, 10) }
           : p
       )
     );
     setIsEditingProductId(null);
     setNewProduct({ name: '', price: '' });
   };
-  
+
   const handleEditTransaction = (id: number) => {
     const trx = transactions.find((t: Transaction) => t.id === id);
     if (!trx) return;
     setNewTransaction({ product: trx.product, buyer: trx.buyer });
     setIsEditingTransactionId(id);
   };
-  
+
   const handleUpdateTransaction = () => {
     if (!newTransaction.product || !newTransaction.buyer) return;
     setTransactions(
@@ -118,7 +118,6 @@ const AdminPage = () => {
     setIsEditingTransactionId(null);
     setNewTransaction({ product: '', buyer: '' });
   };
-  
 
   const handleLogout = () => {
     router.push('/');
