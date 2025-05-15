@@ -29,11 +29,11 @@ export default function Page() {
     let role = '';  // Variabel role dideklarasikan di luar kondisi if
   
     // Validasi kredensial
-    if (username === 'admin123' && password === '12345') {
+    if (username === '1' && password === '1') {
       // Set role sebagai admin
       setError('');
       role = 'admin'; // Assign role sebagai 'admin'
-    } else if (username === 'user123' && password === '12345') {
+    } else if (username === '2' && password === '2') {
       // Set role sebagai user
       setError('');
       role = 'user'; // Assign role sebagai 'user'
