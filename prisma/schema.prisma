@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -27,3 +26,5 @@ model Transaksi {
 
   produk Produk  @relation(fields: [id_produk], references: [id_produk])
 }
+
+
