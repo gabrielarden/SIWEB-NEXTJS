@@ -594,3 +594,4 @@ function SkeletonTable({
     </table>
   );
 }
+

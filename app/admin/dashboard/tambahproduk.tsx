@@ -5,10 +5,13 @@ import { useState } from 'react';
 export default function TambahProduk() {
   const [namaProduk, setNamaProduk] = useState('');
   const [harga, setHarga] = useState('');
+  const [stok, setStok] = useState('');
+  const [foto, setFoto] = useState('');
+  const [deskripsi, setDeskripsi] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const data = { nama_produk: namaProduk, harga: Number(harga) };
+    const data = { nama_produk: namaProduk, harga: Number(harga), stok: Number(stok), foto, deskripsi };
 
     try {
       const res = await fetch('/api/admin/produk', {
@@ -21,6 +24,9 @@ export default function TambahProduk() {
       alert('Produk berhasil ditambahkan!');
       setNamaProduk('');
       setHarga('');
+      setStok('');
+      setFoto('');
+      setDeskripsi('');
     } catch (error) {
       alert((error as Error).message);
     }
@@ -40,6 +46,26 @@ export default function TambahProduk() {
         placeholder="Harga"
         value={harga}
         onChange={(e) => setHarga(e.target.value)}
+        required
+      />
+      <input
+        type="number"
+        placeholder="Stok"
+        value={stok}
+        onChange={(e) => setStok(e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        placeholder="URL Foto"
+        value={foto}
+        onChange={(e) => setFoto(e.target.value)}
+        required
+      />
+      <textarea
+        placeholder="Deskripsi"
+        value={deskripsi}
+        onChange={(e) => setDeskripsi(e.target.value)}
         required
       />
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Tambah Produk</button>

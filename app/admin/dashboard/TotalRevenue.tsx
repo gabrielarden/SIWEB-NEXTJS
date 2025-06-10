@@ -16,3 +16,4 @@ export default function TotalRevenue() {
 
   return <span>Rp {revenue.toLocaleString("id-ID")}</span>;
 }
+

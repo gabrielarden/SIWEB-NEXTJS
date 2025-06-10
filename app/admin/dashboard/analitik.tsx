@@ -9,10 +9,7 @@ export default function AnalitikDashboard() {
       <h2 className="text-xl font-semibold mb-4">Analitik</h2>
       <ul className="space-y-2">
         <li>
-          <strong>Total Produk:</strong>{""}
-          <Suspense fallback={<span>Loading total produk...</span>}>
-          <TotalProduk />
-          </Suspense>
+          <strong>Total Produk:</strong> <TotalProduk />
         </li>
         <li>
           <strong>Total Revenue:</strong>{" "}
