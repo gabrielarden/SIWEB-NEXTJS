@@ -1,4 +1,4 @@
-
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'app/lib/prisma';
 
 export async function PUT(req: NextRequest) {
@@ -20,7 +20,7 @@ export async function PUT(req: NextRequest) {
     });
 
     return NextResponse.json(transaksiUpdated);
-  } catch (error) {import { NextRequest, NextResponse } from 'next/server';
+  } catch (error) {
     console.error('PUT Edit Transaksi Error:', error);
     return NextResponse.json({ error: 'Gagal mengupdate transaksi' }, { status: 500 });
   }
