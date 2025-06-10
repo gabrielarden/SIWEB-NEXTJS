@@ -3,9 +3,7 @@ CREATE TABLE "Produk" (
     "id_produk" SERIAL NOT NULL,
     "nama_produk" TEXT NOT NULL,
     "harga" INTEGER NOT NULL,
-    "stok" INTEGER NOT NULL,
-    "foto" TEXT NOT NULL,
-    "deskripsi" TEXT NOT NULL,
+    
 
     CONSTRAINT "Produk_pkey" PRIMARY KEY ("id_produk")
 );

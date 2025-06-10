@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -12,18 +11,15 @@ model Produk {
   id_produk   Int         @id @default(autoincrement())
   nama_produk String
   harga       Int
-  stok        Int
-  foto        String
-  deskripsi   String
+  foto        String      @db.VarChar
   transaksi   Transaksi[]
 }
 
 model Transaksi {
-  id_transaksi   Int      @id @default(autoincrement())
-  id_produk      Int
-  nama_pembeli   String
-  tanggal        DateTime
-  total_harga    Int
-
-  produk Produk  @relation(fields: [id_produk], references: [id_produk])
+  id_transaksi Int      @id @default(autoincrement())
+  id_produk    Int
+  nama_pembeli String
+  tanggal      DateTime
+  total_harga  Int
+  produk       Produk   @relation(fields: [id_produk], references: [id_produk])
 }

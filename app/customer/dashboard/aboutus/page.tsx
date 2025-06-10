@@ -1,8 +1,15 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
+
 
 export default function OurTeams() {
+  const router = useRouter();
+    const handleLogout = () => {
+      // Redirect ke halaman login
+      router.push("/");
+    };
   return (
     <div className="flex flex-col min-h-screen bg-pink-200">
       {/* Header */}
@@ -13,10 +20,30 @@ export default function OurTeams() {
           <a href="#" className="font-bold text-pink-500">About us</a>
           <a href="/customer/dashboard/teams" className="hover:text-pink-500">Our Teams</a>
         </nav>
-        <div className="space-x-4">
-          <button>👤</button>
-          <button>🛒</button>
-        </div>
+        <div className="flex items-center justify-end gap-4">
+  <button
+    onClick={() => router.push("/customer/dashboard/profile")}
+    className="w-10 h-10 bg-gray-200 hover:bg-gray-300 flex items-center justify-center rounded-full text-xl"
+  >
+    👤
+  </button>
+  <button
+    onClick={handleLogout}
+    className="flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors duration-300"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5 mr-2"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+    </svg>
+    Logout
+  </button>
+</div>
       </header>
 
       {/* Title */}
@@ -103,9 +130,11 @@ export default function OurTeams() {
             </div>
             <div>
               <h4 className="font-bold mb-2">Info</h4>
-              <p>Contact us</p>
               <p>Privacy Policies</p>
               <p>Terms & Conditions</p>
+              <nav className="space-x-6 text-lg text-pink-700">
+                <a href="/customer/dashboard/aboutus" className="hover:text-pink-500">Contact Us</a>
+              </nav>
             </div>
           </div>
         </div>
