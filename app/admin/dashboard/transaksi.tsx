@@ -1,12 +1,7 @@
 import { prisma } from "@/app/lib/prisma";
-import { Transaksi, Produk } from "@prisma/client"; // jika kamu pakai Prisma Client
-
-type TransaksiWithProduk = Transaksi & {
-  produk: Produk | null;
-};
 
 export default async function TabelTransaksi() {
-  const transaksi: TransaksiWithProduk[] = await prisma.transaksi.findMany({
+  const transaksi = await prisma.transaksi.findMany({
     include: { produk: true },
     orderBy: { tanggal: 'desc' },
   });
