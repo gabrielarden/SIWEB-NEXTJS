@@ -1,15 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/app/lib/prisma"; // Pastikan path ini sesuai di proyekmu
+// File: app/api/customer/data/katalog/route.ts
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+import { NextRequest } from "next/server";
+import { prisma } from "@/app/lib/prisma"; // Pastikan path ini sesuai
+
+export async function GET(req: NextRequest) {
   try {
     const products = await prisma.produk.findMany();
-    res.status(200).json(products);
+    return Response.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
-    res.status(500).json({ error: "Failed to fetch products" });
+    return new Response(JSON.stringify({ error: "Failed to fetch products" }), {
+      status: 500,
+    });
   }
 }
