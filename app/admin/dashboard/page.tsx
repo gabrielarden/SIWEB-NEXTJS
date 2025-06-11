@@ -11,10 +11,10 @@ import {
   HeartIcon,
 } from '@heroicons/react/24/outline';
 import { StatCardSkeleton } from './StatCardSkeleton';
-import AdminProfile from '@/app/components/AdminProfile';
-import PenjualanChart from '@/app/components/PenjualanChart';
-import SidebarItem from '@/app/components/SidebarItem';
-import { StatCard } from '@/app/components/Statcard';
+import AdminProfile from './components/AdminProfile';
+import PenjualanChart from './components/PenjualanChart';
+import SidebarItem from './components/SidebarItem';
+import { StatCard } from './components/Statcard';
 
 interface Produk {
   id_produk: number;
