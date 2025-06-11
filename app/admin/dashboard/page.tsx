@@ -1,5 +1,5 @@
 'use client';
-
+import { StatCardSkeleton } from './StatCardSkeleton';
 import AdminProfile from '@/app/components/AdminProfile';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -39,14 +39,7 @@ interface Transaksi {
   total_harga: number;
 }
 
-export function StatCardSkeleton() {
-  return (
-    <div className="bg-white p-4 rounded shadow animate-pulse">
-      <div className="h-6 bg-gray-300 rounded mb-2"></div>
-      <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-    </div>
-  );
-}
+
 
 export default function DashboardPage() {
   const [activeMenu, setActiveMenu] = useState<MenuKey>('dashboard');
