@@ -40,8 +40,8 @@ interface Transaksi {
 }
 
 
+function DashboardPage() {
 
-export default function DashboardPage() {
   const [activeMenu, setActiveMenu] = useState<MenuKey>('dashboard');
   const [produk, setProduk] = useState<Produk[]>([]);
   const [transaksi, setTransaksi] = useState<Transaksi[]>([]);
@@ -500,6 +500,7 @@ export default function DashboardPage() {
       )}
     </div>
   );
+
 }
 
 
@@ -589,3 +590,4 @@ function SkeletonTable({
   );
 }
 
+export default DashboardPage;
