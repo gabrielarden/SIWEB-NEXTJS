@@ -11,7 +11,7 @@ model Produk {
   id_produk   Int         @id @default(autoincrement())
   nama_produk String
   harga       Int
-  foto        String      @db.VarChar
+  foto        String?     @db.VarChar
   transaksi   Transaksi[]
 }
 

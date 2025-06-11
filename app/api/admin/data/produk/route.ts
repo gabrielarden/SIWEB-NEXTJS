@@ -22,7 +22,6 @@ export async function GET() {
         id_produk: true,
         nama_produk: true,
         harga: true,
-        foto: true
       },
     });
 

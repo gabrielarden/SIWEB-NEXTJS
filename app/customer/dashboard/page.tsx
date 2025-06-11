@@ -25,10 +25,8 @@ export default function TabelProduk() {
     async function fetchProduk() {
       try {
         const res = await fetch("/api/admin/data");
-        console.log(res)
         if (res.ok) {
           const data = await res.json();
-          console.log(`data`, data.produk)
           setProduk(data.produk);
         } else {
           console.error("Failed to fetch produk");
