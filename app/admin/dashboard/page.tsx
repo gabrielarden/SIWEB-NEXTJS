@@ -1,8 +1,6 @@
 'use client';
-import { StatCardSkeleton } from './StatCardSkeleton';
-import AdminProfile from '@/app/components/AdminProfile';
-import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   HomeIcon,
   ShoppingBagIcon,
@@ -12,18 +10,11 @@ import {
   TrashIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
-
-import {
-  BarChart,
-  Bar,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-
-type MenuKey = 'dashboard' | 'produk' | 'transaksi' | 'profile';
+import { StatCardSkeleton } from './StatCardSkeleton';
+import AdminProfile from '@/app/components/AdminProfile';
+import PenjualanChart from '@/app/components/PenjualanChart';
+import SidebarItem from '@/app/components/SidebarItem';
+import { StatCard } from '@/app/components/Statcard';
 
 interface Produk {
   id_produk: number;
@@ -39,9 +30,9 @@ interface Transaksi {
   total_harga: number;
 }
 
+type MenuKey = 'dashboard' | 'produk' | 'transaksi' | 'profile';
 
 export default function DashboardPage() {
-
   const [activeMenu, setActiveMenu] = useState<MenuKey>('dashboard');
   const [produk, setProduk] = useState<Produk[]>([]);
   const [transaksi, setTransaksi] = useState<Transaksi[]>([]);
@@ -63,7 +54,13 @@ export default function DashboardPage() {
   const [editProdukForm, setEditProdukForm] = useState({ nama_produk: '', harga: '' });
 
   const [editTransaksiId, setEditTransaksiId] = useState<number | null>(null);
-  const [editTransaksiForm, setEditTransaksiForm] = useState({ id_produk: '', nama_pembeli: '', total_harga: '' });
+  const [editTransaksiForm, setEditTransaksiForm] = useState({ 
+    id_produk: '', 
+    nama_pembeli: '', 
+    total_harga: '' 
+  });
+
+  const router = useRouter();
 
   useEffect(() => {
     setTimeout(() => setLoadingStats(false), 2000);
@@ -98,6 +95,7 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
+  // Fungsi-fungsi handler untuk produk dan transaksi
   async function handleAddProduk() {
     if (!formProduk.nama_produk || !formProduk.harga) {
       alert('Isi form produk dulu!');
@@ -227,28 +225,41 @@ export default function DashboardPage() {
     return Object.entries(map).map(([bulan, total]) => ({ bulan, total }));
   })();
 
-  const router = useRouter();
-
-  
-
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-gray-100 flex flex-col">
         <div className="px-6 py-4 font-bold text-pink-600 text-xl border-b border-gray-700">BOUQUETS HUB</div>
         <nav className="flex-1 px-2 py-4 space-y-1">
-          <SidebarItem icon={<HomeIcon className="w-6 h-6" />} label="Dashboard" active={activeMenu === 'dashboard'} onClick={() => setActiveMenu('dashboard')} />
-          <SidebarItem icon={<ShoppingBagIcon className="w-6 h-6" />} label="Produk" active={activeMenu === 'produk'} onClick={() => setActiveMenu('produk')} />
-          <SidebarItem icon={<CurrencyDollarIcon className="w-6 h-6" />} label="Transaksi" active={activeMenu === 'transaksi'} onClick={() => setActiveMenu('transaksi')} />
-          <SidebarItem icon={<HeartIcon className="w-6 h-6" />} label="Profile" active={activeMenu === 'profile'} onClick={() => setActiveMenu('profile')} />
-
+          <SidebarItem 
+            icon={<HomeIcon className="w-6 h-6" />} 
+            label="Dashboard" 
+            active={activeMenu === 'dashboard'} 
+            onClick={() => setActiveMenu('dashboard')} 
+          />
+          <SidebarItem 
+            icon={<ShoppingBagIcon className="w-6 h-6" />} 
+            label="Produk" 
+            active={activeMenu === 'produk'} 
+            onClick={() => setActiveMenu('produk')} 
+          />
+          <SidebarItem 
+            icon={<CurrencyDollarIcon className="w-6 h-6" />} 
+            label="Transaksi" 
+            active={activeMenu === 'transaksi'} 
+            onClick={() => setActiveMenu('transaksi')} 
+          />
+          <SidebarItem 
+            icon={<HeartIcon className="w-6 h-6" />} 
+            label="Profile" 
+            active={activeMenu === 'profile'} 
+            onClick={() => setActiveMenu('profile')} 
+          />
         </nav>
         <button
           className="px-6 py-3 text-pink-600 hover:bg-gray-800 border-t border-gray-700 flex items-center space-x-2"
           onClick={() => {
-            // Optional: clear local storage/session
             localStorage.clear();
-            // Redirect to login
             router.push('/');
           }}
         >
@@ -257,16 +268,14 @@ export default function DashboardPage() {
         </button>
       </aside>
 
-      {/* Content */}
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {activeMenu === 'profile' && <AdminProfile />}
 
-      {activeMenu === 'profile' && <AdminProfile />}
-
-      <div className="flex-1 p-6 overflow-y-auto">
         {activeMenu === 'dashboard' && (
-          <div>
+          <div className="p-6 overflow-y-auto">
             <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-            {/* Statistik dummy */}
             {loadingStats ? (
               <div className="grid grid-cols-4 gap-4 mb-4">
                 <StatCardSkeleton />
@@ -276,7 +285,6 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                {/* Stat Cards */}
                 <div className="grid grid-cols-4 gap-4 mb-4">
                   <StatCard label="Total Views" value={3456} />
                   <StatCard label="Total Profit" value={totalRevenue} />
@@ -285,7 +293,6 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {/* Info Revenue & Produk Terlaris */}
                   <div className="bg-white p-4 rounded shadow">
                     <p className="text-sm mb-2">
                       <strong>Total Revenue:</strong> Rp {totalRevenue.toLocaleString()}
@@ -295,7 +302,6 @@ export default function DashboardPage() {
                     </p>
                   </div>
 
-                  {/* Grafik Penjualan */}
                   <div className="col-span-4 bg-white p-4 rounded shadow">
                     <h2 className="text-lg font-semibold mb-2">Grafik Penjualan</h2>
                     <div className="h-60">
@@ -307,285 +313,213 @@ export default function DashboardPage() {
             )}
           </div>
         )}
-      </div>
 
-      {activeMenu === 'produk' && (
-        <div className="p-4 w-full">
-          <h1 className="text-2xl font-bold mb-4">Manajemen Produk</h1>
+        {activeMenu === 'produk' && (
+          <div className="p-6 overflow-y-auto">
+            <h1 className="text-2xl font-bold mb-4">Manajemen Produk</h1>
 
-          <div className="flex gap-2mb-2">
-            <input
-              type="text"
-              placeholder="Cari produk..."
-              value={searchProduk}
-              onChange={(e) => setSearchProduk(e.target.value)}
-              className="border p-2 rounded w-full max-w-md"
-            />
-          </div>
+            <div className="flex gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="Cari produk..."
+                value={searchProduk}
+                onChange={(e) => setSearchProduk(e.target.value)}
+                className="border p-2 rounded w-full max-w-md"
+              />
+            </div>
 
-          <div className="flex gap-2 mt-4 mb-2">
-            <input
-              type="text"
-              placeholder="Nama Produk"
-              value={editProdukId ? editProdukForm.nama_produk : formProduk.nama_produk}
-              onChange={(e) =>
-                editProdukId
-                  ? setEditProdukForm({ ...editProdukForm, nama_produk: e.target.value })
-                  : setFormProduk({ ...formProduk, nama_produk: e.target.value })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="number"
-              placeholder="Harga"
-              value={editProdukId ? editProdukForm.harga : formProduk.harga}
-              onChange={(e) =>
-                editProdukId
-                  ? setEditProdukForm({ ...editProdukForm, harga: e.target.value })
-                  : setFormProduk({ ...formProduk, harga: e.target.value })
-              }
-              className="border p-2 rounded"
-            />
-            <button
-              onClick={editProdukId ? handleUpdateProduk : handleAddProduk}
-              className="bg-pink-500 text-white px-4 py-2 rounded"
-            >
-              {editProdukId ? 'Simpan' : 'Tambah'}
-            </button>
-          </div>
-
-          <table className="w-full table-auto mt-4 bg-white rounded shadow">
-            <thead>
-              <tr>
-                <th className="border px-4 py-2">Nama Produk</th>
-                <th className="border px-4 py-2">Harga</th>
-                <th className="border px-4 py-2">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProduk.map((p) => (
-                <tr key={p.id_produk}>
-                  <td className="border px-4 py-2">{p.nama_produk}</td>
-                  <td className="border px-4 py-2">Rp {p.harga.toLocaleString('id-ID')}</td>
-                  <td className="border px-4 py-2 flex gap-2 justify-center">
-                    <button onClick={() => handleEditProduk(p.id_produk)}>
-                      <PencilSquareIcon className="h-5 w-5 text-blue-600" />
-                    </button>
-                    <button onClick={() => handleDeleteProduk(p.id_produk)}>
-                      <TrashIcon className="h-5 w-5 text-red-600" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-
-      {activeMenu === 'transaksi' && (
-  <div className="p-6 w-full">
-    <h1 className="text-2xl font-bold mb-4">Riwayat Transaksi</h1>
-    <div className="mb-2">
-      <input
-        type="text"
-        placeholder="Cari pembeli..."
-        value={searchTransaksi}
-        onChange={(e) => setSearchTransaksi(e.target.value)}
-        className="border p-2 rounded w-full max-w-md"
-      />
-    </div>
-
-    <div className="flex gap-2 mt-4 mb-2">
-      {editTransaksiId ? (
-        <>
-          <input
-            type="number"
-            placeholder="ID Produk"
-            value={editTransaksiForm.id_produk}
-            onChange={(e) => setEditTransaksiForm({ ...editTransaksiForm, id_produk: parseInt(e.target.value) })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Nama Pembeli"
-            value={editTransaksiForm.nama_pembeli}
-            onChange={(e) => setEditTransaksiForm({ ...editTransaksiForm, nama_pembeli: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Total Harga"
-            value={editTransaksiForm.total_harga}
-            onChange={(e) => setEditTransaksiForm({ ...editTransaksiForm, total_harga: parseInt(e.target.value) })}
-            className="border p-2 rounded"
-          />
-        </>
-      ) : (
-        <>
-          <select
-            value={formTransaksi.id_produk}
-            onChange={(e) => {
-              const selectedId = parseInt(e.target.value);
-              const selectedProduk = produk.find((p) => p.id_produk === selectedId);
-              setFormTransaksi({
-                ...formTransaksi,
-                id_produk: selectedId,
-                total_harga: selectedProduk ? selectedProduk.harga : 0,
-              });
-            }}
-            className="border p-2 rounded"
-          >
-            <option value="">Pilih Produk</option>
-            {produk.map((p) => (
-              <option key={p.id_produk} value={p.id_produk}>
-                {p.nama_produk} - Rp {p.harga.toLocaleString('id-ID')}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            placeholder="Nama Pembeli"
-            value={formTransaksi.nama_pembeli}
-            onChange={(e) => setFormTransaksi({ ...formTransaksi, nama_pembeli: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Total Harga"
-            value={formTransaksi.total_harga}
-            readOnly
-            className="border p-2 rounded bg-gray-100"
-          />
-        </>
-      )}
-      <button
-        onClick={editTransaksiId ? handleUpdateTransaksi : handleAddTransaksi}
-        className="bg-pink-500 text-white px-4 py-2 rounded"
-      >
-        {editTransaksiId ? 'Simpan' : 'Tambah'}
-      </button>
-    </div>
-
-    <table className="w-full table-auto mt-4 bg-white rounded shadow">
-      <thead>
-        <tr>
-          <th className="border px-4 py-2">ID Produk</th>
-          <th className="border px-4 py-2">Nama Pembeli</th>
-          <th className="border px-4 py-2">Total Harga</th>
-          <th className="border px-4 py-2">Tanggal</th>
-          <th className="border px-4 py-2">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredTransaksi.map((t) => (
-          <tr key={t.id_transaksi}>
-            <td className="border px-4 py-2">{t.id_produk}</td>
-            <td className="border px-4 py-2">{t.nama_pembeli}</td>
-            <td className="border px-4 py-2">Rp {t.total_harga.toLocaleString('id-ID')}</td>
-            <td className="border px-4 py-2">{new Date(t.tanggal).toLocaleDateString('id-ID')}</td>
-            <td className="border px-4 py-2 flex gap-2 justify-center">
-              <button onClick={() => handleEditTransaksi(t.id_transaksi)}>
-                <PencilSquareIcon className="h-5 w-5 text-blue-600" />
-              </button>
-              <button onClick={() => handleDeleteTransaksi(t.id_transaksi)}>
-                <TrashIcon className="h-5 w-5 text-red-600" />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-      )}
-    </div>
-  );
-
-}
-
-
-// Sidebar Item Component
-function SidebarItem({
-  icon,
-  label,
-  active,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center px-4 py-2 rounded hover:bg-gray-700 transition ${active ? 'bg-pink-600 text-white' : 'text-gray-300'
-        }`}
-    >
-      {icon}
-      <span className="ml-3">{label}</span>
-    </button>
-  );
-}
-
-// Stat Card Component
-function StatCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="bg-white p-4 rounded shadow text-center">
-      <div className="text-2xl font-bold">{value.toLocaleString()}</div>
-      <div className="text-gray-500">{label}</div>
-    </div>
-  );
-}
-
-// Chart Component
-function PenjualanChart({ data }: { data: { bulan: string; total: number }[] }) {
-  return (
-    <ResponsiveContainer width="100%" height={250}>
-      <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="bulan" />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey="total" fill="#ec4899" />
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
-
-// Skeleton Table Component
-function SkeletonTable({
-  columns,
-  rows,
-}: {
-  columns: string[];
-  rows: number;
-}) {
-  return (
-    <table className="min-w-full border-collapse border border-gray-300">
-      <thead className="bg-gray-200">
-        <tr>
-          {columns.map((col) => (
-            <th key={col} className="border px-4 py-2 animate-pulse bg-gray-300 text-transparent">
-              {col}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {[...Array(rows)].map((_, i) => (
-          <tr key={i}>
-            {columns.map((col, idx) => (
-              <td
-                key={col + idx}
-                className="border px-4 py-2 animate-pulse bg-gray-300 text-transparent"
+            <div className="flex gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="Nama Produk"
+                value={editProdukId ? editProdukForm.nama_produk : formProduk.nama_produk}
+                onChange={(e) =>
+                  editProdukId
+                    ? setEditProdukForm({ ...editProdukForm, nama_produk: e.target.value })
+                    : setFormProduk({ ...formProduk, nama_produk: e.target.value })
+                }
+                className="border p-2 rounded"
+              />
+              <input
+                type="number"
+                placeholder="Harga"
+                value={editProdukId ? editProdukForm.harga : formProduk.harga}
+                onChange={(e) =>
+                  editProdukId
+                    ? setEditProdukForm({ ...editProdukForm, harga: e.target.value })
+                    : setFormProduk({ ...formProduk, harga: e.target.value })
+                }
+                className="border p-2 rounded"
+              />
+              <button
+                onClick={editProdukId ? handleUpdateProduk : handleAddProduk}
+                className="bg-pink-500 text-white px-4 py-2 rounded"
               >
-                loading
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+                {editProdukId ? 'Simpan' : 'Tambah'}
+              </button>
+            </div>
+
+            <div className="overflow-x-auto bg-white rounded shadow">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="border px-4 py-2">Nama Produk</th>
+                    <th className="border px-4 py-2">Harga</th>
+                    <th className="border px-4 py-2">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProduk.map((p) => (
+                    <tr key={p.id_produk}>
+                      <td className="border px-4 py-2">{p.nama_produk}</td>
+                      <td className="border px-4 py-2">Rp {p.harga.toLocaleString('id-ID')}</td>
+                      <td className="border px-4 py-2 flex gap-2 justify-center">
+                        <button 
+                          onClick={() => handleEditProduk(p.id_produk)}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
+                          <PencilSquareIcon className="h-5 w-5 text-blue-600" />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteProduk(p.id_produk)}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
+                          <TrashIcon className="h-5 w-5 text-red-600" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'transaksi' && (
+          <div className="p-6 overflow-y-auto">
+            <h1 className="text-2xl font-bold mb-4">Riwayat Transaksi</h1>
+            
+            <div className="flex gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="Cari pembeli..."
+                value={searchTransaksi}
+                onChange={(e) => setSearchTransaksi(e.target.value)}
+                className="border p-2 rounded w-full max-w-md"
+              />
+            </div>
+
+            <div className="flex gap-2 mb-4 flex-wrap">
+              {editTransaksiId ? (
+                <>
+                  <input
+                    type="number"
+                    placeholder="ID Produk"
+                    value={editTransaksiForm.id_produk}
+                    onChange={(e) => setEditTransaksiForm({ ...editTransaksiForm, id_produk: e.target.value })}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Nama Pembeli"
+                    value={editTransaksiForm.nama_pembeli}
+                    onChange={(e) => setEditTransaksiForm({ ...editTransaksiForm, nama_pembeli: e.target.value })}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Total Harga"
+                    value={editTransaksiForm.total_harga}
+                    onChange={(e) => setEditTransaksiForm({ ...editTransaksiForm, total_harga: e.target.value })}
+                    className="border p-2 rounded"
+                  />
+                </>
+              ) : (
+                <>
+                  <select
+                    value={formTransaksi.id_produk}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      const selectedProduk = produk.find((p) => p.id_produk.toString() === selectedId);
+                      setFormTransaksi({
+                        ...formTransaksi,
+                        id_produk: selectedId,
+                        total_harga: selectedProduk ? selectedProduk.harga.toString() : '',
+                      });
+                    }}
+                    className="border p-2 rounded"
+                  >
+                    <option value="">Pilih Produk</option>
+                    {produk.map((p) => (
+                      <option key={p.id_produk} value={p.id_produk}>
+                        {p.nama_produk} - Rp {p.harga.toLocaleString('id-ID')}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Nama Pembeli"
+                    value={formTransaksi.nama_pembeli}
+                    onChange={(e) => setFormTransaksi({ ...formTransaksi, nama_pembeli: e.target.value })}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Total Harga"
+                    value={formTransaksi.total_harga}
+                    readOnly
+                    className="border p-2 rounded bg-gray-100"
+                  />
+                </>
+              )}
+              <button
+                onClick={editTransaksiId ? handleUpdateTransaksi : handleAddTransaksi}
+                className="bg-pink-500 text-white px-4 py-2 rounded"
+              >
+                {editTransaksiId ? 'Simpan' : 'Tambah'}
+              </button>
+            </div>
+
+            <div className="overflow-x-auto bg-white rounded shadow">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="border px-4 py-2">ID Produk</th>
+                    <th className="border px-4 py-2">Nama Pembeli</th>
+                    <th className="border px-4 py-2">Total Harga</th>
+                    <th className="border px-4 py-2">Tanggal</th>
+                    <th className="border px-4 py-2">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredTransaksi.map((t) => (
+                    <tr key={t.id_transaksi}>
+                      <td className="border px-4 py-2">{t.id_produk}</td>
+                      <td className="border px-4 py-2">{t.nama_pembeli}</td>
+                      <td className="border px-4 py-2">Rp {t.total_harga.toLocaleString('id-ID')}</td>
+                      <td className="border px-4 py-2">{new Date(t.tanggal).toLocaleDateString('id-ID')}</td>
+                      <td className="border px-4 py-2 flex gap-2 justify-center">
+                        <button 
+                          onClick={() => handleEditTransaksi(t.id_transaksi)}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
+                          <PencilSquareIcon className="h-5 w-5 text-blue-600" />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteTransaksi(t.id_transaksi)}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
+                          <TrashIcon className="h-5 w-5 text-red-600" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
