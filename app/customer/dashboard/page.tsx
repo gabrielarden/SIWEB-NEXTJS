@@ -25,8 +25,10 @@ export default function TabelProduk() {
     async function fetchProduk() {
       try {
         const res = await fetch("/api/admin/data");
+        console.log(res)
         if (res.ok) {
           const data = await res.json();
+          console.log(`data`, data.produk)
           setProduk(data.produk);
         } else {
           console.error("Failed to fetch produk");
@@ -99,7 +101,7 @@ export default function TabelProduk() {
               className="cursor-pointer bg-white rounded shadow p-4 hover:shadow-lg transition"
             >
               <Image
-                src={product.foto ? `/${product.foto}` : "/amour-rouge.png"}
+                src={product.foto}
                 width={300}
                 height={200}
                 alt={product.nama_produk}
