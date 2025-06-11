@@ -1,30 +1,37 @@
-// app/customer/dashboard/profile.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Tambahkan interface User
+interface User {
+  nama: string;
+  email: string;
+  alamat: string;
+}
+
 export default function ProfilePage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null); // tambahkan tipe User
   const router = useRouter();
 
   useEffect(() => {
-    // Simulasi pengambilan data user (bisa dari localStorage, API, atau session)
+    // Simulasi pengambilan data user
     const userData = JSON.parse(localStorage.getItem("user") || "{}");
+
     if (!userData || !userData.nama) {
-      router.push("/"); // redirect kalau belum login
+      router.push("/");
     } else {
       setUser(userData);
     }
   }, [router]);
 
-  const userData = {
-  nama: "Gabriel Arden",
-  email: "gabriel@example.com",
-  alamat: "Jl. Mawar No. 12, Sleman"
-};
-
-localStorage.setItem("user", JSON.stringify(userData));
+  // Simulasi dummy data user (harus dipindah ke luar komponen atau ke halaman login seharusnya)
+  const userData: User = {
+    nama: "Gabriel Arden",
+    email: "gabriel@example.com",
+    alamat: "Jl. Mawar No. 12, Sleman"
+  };
+  localStorage.setItem("user", JSON.stringify(userData));
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -32,7 +39,6 @@ localStorage.setItem("user", JSON.stringify(userData));
   };
 
   if (!user) return <p className="p-4">Loading...</p>;
-
   return (
     <div className="bg-white">
       {/* Navbar */}

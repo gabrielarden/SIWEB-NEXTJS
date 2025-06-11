@@ -10,9 +10,6 @@ export async function POST(req: NextRequest) {
       data: {
         nama_produk,
         harga,
-        stok,
-        foto,
-        deskripsi,
       },
     });
 

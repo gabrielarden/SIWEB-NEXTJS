@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+
 export default function TabelProduk() {
   const [produk, setProduk] = useState([]);
   const [isAmourModalOpen, setIsAmourModalOpen] = useState(false);
@@ -92,7 +93,7 @@ export default function TabelProduk() {
         <p className="text-gray-600 mb-8">Order it for you or for your beloved ones</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
           {produk.length === 0 && <p className="col-span-full">Loading products...</p>}
-          {produk.map((product) => (
+          {produk.map((product: any) => (
             <div
               key={product.id_produk}
               onClick={product.nama_produk === "Amour Rouge" ? openAmourModal : undefined}
