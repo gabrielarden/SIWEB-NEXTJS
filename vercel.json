@@ -1,5 +1,5 @@
 {
-  "scripts": {
-    "build": "pnpm prisma generate && pnpm build"
-  }
+  "buildCommand": "pnpm prisma generate && pnpm build",
+  "outputDirectory": ".next",
+  "ignoreCommand": "echo ''"
 }
