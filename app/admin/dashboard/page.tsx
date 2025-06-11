@@ -12,6 +12,7 @@ import {
   TrashIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
+
 import {
   BarChart,
   Bar,
