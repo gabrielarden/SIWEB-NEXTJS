@@ -15,6 +15,16 @@ proyek dimulai dari bulan maret yang pada awalnya membuat desain figma untuk pel
 Link GitHub : https://github.com/gabrielarden/SIWEB-NEXTJS.git
 Link deploy : https://siweb-nextjs-git-main-gabrielardens-projects.vercel.app
 
+Username&Password:
+
+Customer:
+Username : 2
+Password: 2
+
+Admin:
+Username : 1
+Password: 1
+
 Bagian yang sudah dikerjakan tiap anggota: 
 Gabriel Arden Juansava : Membuat design figma, membuat code web pelanggan, push GitHub, deploy vercel
 Cokorda Gde Raditya Wirajuna Kamajaya : Membuat design figma, membuat code web
